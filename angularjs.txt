@@ -1,0 +1,27 @@
+AngularJS NOTES
+===============
+
+0. controller(ctrl) in angularjs is a js func
+
+1. 注册服务
+	myMod.value(name, value) register value or object
+	myMod.service(name, constrcutor) register constrcutor function
+	constructor in js:
+		a function used to construct object.
+		usually contains keywork this
+		does not need to return anything
+	prototype in js:
+		a object holds property and function info shared by all objects.
+	more on prototype in js: check https://segmentfault.com/a/1190000000602050
+	myMod.factory(name, function) register any function that returns an object.
+		what factory returns is closure
+			closure in js
+				same with python's
+
+	
+	
+		
+		
+		
+		
+		

@@ -1,0 +1,64 @@
+work note
+=========
+2018/09/12
+
+class looking at:
+D:\Users\jyan\code\Artemis\artemis-ctrip\src\main\java\com\ctrip\soa\artemis\ctrip\ops\OpsServiceImpl.java
+method looking at:
+getAppsIDCStatus
+
+mindmap file for relative class:
+D:\Users\jyan\NOTES\corp_notes\get-apps-idc-status.json
+
+notes
+=====
+0. data flow about the interface:
+	request: [appId]
+	response: [App]
+1. One app contains multiple services and each service contains multiple idc. Actually Service and App is many-to-many.
+2. about generateIdcs(Service service, Set<ZoneKey> downServiceZones) method of class Idcs.java
+	
+	// generate the corresponding idcs for the service
+	protected static List<Idc> generateIdcs(Service service, Set<ZoneKey> downServiceZones) {
+        ValueCheckers.notNull(downServiceZones, "downServiceZones");
+        List<Idc> idcs = Lists.newArrayList();
+        if (service == null) {
+            return idcs;
+        }
+        removeUnnecessaryInstances(service); // filter through ServiceInstanceFilter and EnvironmentFilter
+        Multiset<ZoneKey> runningCounts = countInstanceByZone(service.clone());
+        removeDownInstances(service);
+        Multiset<ZoneKey> upCounts = countInstanceByZone(service.clone());
+
+        Set<ZoneKey> allZones = Sets.newHashSet(downServiceZones);
+        allZones.addAll(runningCounts.elementSet());
+
+        for (ZoneKey zoneKey : allZones) {
+            String status = downServiceZones.contains(zoneKey) ? ZoneStatus.DOWN : ZoneStatus.UP;
+            int runningCount = runningCounts.count(zoneKey);
+            int upCount = upCounts.count(zoneKey);
+            int downCount = runningCount - upCount;
+            idcs.add(new Idc(zoneKey.getZoneId(), status, runningCount, upCount, downCount));
+        }
+
+        return idcs;
+    }
+
+    every zone has its own idc which describe the running status(running, up or down) of its all instances. 
+
+3. method stack
+	Apps.getApps([appId])
+	Apps.generateApps(getAppServices([appId]), getDownZones())
+		getAppServices([appId]) // use ServiceManager to get all auto registry services and use [appId] to filter out the service that we don't need.
+		getDownZones() 
+
+
+more to learn
+=============
+1. MultiSet interface in guava
+	Unlike Set interface, Multiset can contain multiple same elements and provide methods to count them.
+2. ArtemisTraceExecutor class
+3. ListMultimap interface in guava
+	equal to Map<K, List<V>> or defualtdict(list) in python
+	SetMultimap = defaultdict(set)
+4. ServiceManager class

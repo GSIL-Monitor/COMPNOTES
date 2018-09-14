@@ -1,0 +1,19 @@
+SERVICE CONTEXT解读
+===================
+
+例子
+http://artemis.soa.fx.fws.qa.nt.ctripcorp.com/artemis-service/api/management/service-context.json?serviceId=framework.soa4j.registryservice.v1.registryservice
+
+几个关键属性
+0. groupBuildResults
+	表示一组服务器，每个分组维护一组服务器(IPs)。
+	疑问
+		1. 每个分组下面的children表示什么？
+1. routeBuildResults
+	表示后台配置的路由
+	一条路由包含了若干个服务器（其实是服务器组）和一个负载均衡算法。
+2. routeMatchRuleBuildResults
+	表示后台配置的路由匹配规则
+	本质上将一个调用方分组和一组服务器分组关联在一起
+3. routeMatchRules
+4. 

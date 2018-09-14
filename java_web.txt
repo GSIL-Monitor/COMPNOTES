@@ -1,0 +1,5 @@
+JAVA WEB NOTES
+==============
+
+一个Jsp文件如何得到渲染？
+url到controller然后，然后controller返回一条到jsp的路径，从而调用jsp的结果。
